@@ -2,29 +2,12 @@
 
 int main(){
 
-    vector<Evento> eventos;
+    vector<Evento>eventos;
+    vector<improvedEvento>improvedeventos;
     obtenerRegistro(eventos);
-    for(auto it=eventos.begin();it!=eventos.end();it++){
-        Evento aux=*it;
-        cout<<aux.mostrar()<<endl;
-    }
-    cout<<eventos.size()<<endl;
+    obtenerRegistro(improvedeventos);
 
-
-
-
-
-    
-
-   
-
-
-
-
-    
-
-    
-    /*int opcion=0;
+    int opcion=0;
     do{
         menu();
         cin>>opcion;
@@ -45,16 +28,22 @@ int main(){
                             cin>>op2;
                             if(op2==1){
                                 improvedEvento aux=crearImprovedEvento(improvedeventos);
-                                repetirEvento(aux,1,improvedeventos);
+                                repetirEvento(aux,1,improvedeventos,0);
                             }
                             if(op2==2){
-
+                                improvedEvento aux=crearImprovedEvento(improvedeventos);
+                                repetirEvento(aux,2,improvedeventos,0);
                             }
                             if(op2==3){
-
+                                improvedEvento aux=crearImprovedEvento(improvedeventos);
+                                repetirEvento(aux,3,improvedeventos,0);
                             }
                             if(op2==4){
-
+                                int x;
+                                cout<<"Cada cuantos dias desea que se repita?"<<endl;
+                                cin>>x;
+                                improvedEvento aux=crearImprovedEvento(improvedeventos);
+                                repetirEvento(aux,4,improvedeventos,x);
                             }
                             break;
                         
@@ -75,16 +64,23 @@ int main(){
                             int op2;
                             cin>>op2;
                             if(op2==1){
-
+                                Evento aux=crearEvento(eventos);
+                                repetirEvento(aux,1,eventos,0);
                             }
                             if(op2==2){
-
+                                Evento aux=crearEvento(eventos);
+                                repetirEvento(aux,2,eventos,0);
                             }
                             if(op2==3){
-
+                                Evento aux=crearEvento(eventos);
+                                repetirEvento(aux,3,eventos,0);
                             }
                             if(op2==4){
-
+                                int x;
+                                cout<<"Cada cuantos dias dese que se repita?"<<endl;
+                                cin>>x;
+                                Evento aux=crearEvento(eventos);
+                                repetirEvento(aux,4,eventos,x);
                             }
                             break;
                         
@@ -121,7 +117,7 @@ int main(){
             default:
                 cout<<"Opcion no valida."<<endl<<endl;
         }
-    }while(opcion!=9);*/
+    }while(opcion!=9);
 
     return 0;
 }
