@@ -2,6 +2,7 @@
 #include <ctime>
 #include <fstream>
 #include <vector>
+#include <string.h>
 
 
 using namespace std;
@@ -353,19 +354,21 @@ void obtenerRegistro(vector<Evento>& eventos){
 
         while(!registroLectura.eof()){
             string nombre;
+            string cad="";
             int a,b,c;
-            getline(registroLectura,nombre,'\n');
-            registroLectura>>a;
-            registroLectura>>b;
-            registroLectura>>c;
-            registroLectura.get();
-            eventos.push_back(Evento(nombre,a,b,c));
+            getline(registroLectura,nombre);
+            if(nombre.compare(cad)!=0){
+                registroLectura>>a;
+                registroLectura>>b;
+                registroLectura>>c;
+                eventos.push_back(Evento(nombre,a,b,c));
+            }
         }
         registroLectura.close();
     }
 }
 
-/*void obtenerRegistro(vector<improvedEvento>& improvedeventos){
+void obtenerRegistro(vector<improvedEvento>& improvedeventos){
     bool existe=archivo_existe("Registro2.txt");
 
     if(existe){
@@ -380,12 +383,23 @@ void obtenerRegistro(vector<Evento>& eventos){
 
         while(!registroLectura.eof()){
             string nombre,a,b,c,lugar,descripcion;
+            string cad="";
             getline(registroLectura,nombre);
-            improvedeventos.push_back(improvedEvento(nombre,10,02,2003,lugar,descripcion));
+            if(nombre.compare(cad)!=0){
+                getline(registroLectura,a);
+                getline(registroLectura,b);
+                getline(registroLectura,c);
+                getline(registroLectura,lugar);
+                getline(registroLectura,descripcion);
+                int dia=stoi(a);
+                int mes=stoi(b);
+                int anio=stoi(c);
+                improvedeventos.push_back(improvedEvento(nombre,dia,mes,anio,lugar,descripcion));
+            }
         }
         registroLectura.close();
     }
-}*/
+}
 
 
 
