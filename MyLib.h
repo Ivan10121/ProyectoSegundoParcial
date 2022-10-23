@@ -191,37 +191,54 @@ void capturaEvento(vector<Evento>&eventos){
     string nombre;
     getline(cin,nombre);
     cout<<"Ingrese la fecha del evento con el formato DD MM AAAA"<<endl;
-    int dia;cin>>dia;
-    int mes;cin>>mes;
-    int anio;cin>>anio;
-    eventos.push_back(Evento(nombre,dia,mes,anio));
-    
-    if(registroLectura.fail()){
-        cout<<"No se pudo abrir el registro";
-    }
+    string dia;
+    string mes;
+    string anio;
+    cin>>dia;
+    cin>>mes;
+    cin>>anio;
 
-    registroEcritura.open("Registro.txt",ios::out|ios::app);
-    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl;
-    registroEcritura.close();
+    try{
+        int a=stoi(dia);
+        int b=stoi(mes);
+        int c=stoi(anio);
+        eventos.push_back(Evento(nombre,a,b,c));
+        registroEcritura.open("Registro.txt",ios::out|ios::app);
+        registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl;
+        registroEcritura.close();
+    }
+    catch(exception e){
+        cout<<"Por favor ingrese la fecha con el formato especificado"<<endl<<endl;
+    }
 }
 
 Evento crearEvento(vector<Evento>&eventos){
+    
     cout<<"Ingrese el nombre del evento"<<endl;
     limpiarBuffer();
     string nombre;
     getline(cin,nombre);
     cout<<"Ingrese la fecha del evento con el formato DD MM AAAA"<<endl;
-    int dia;cin>>dia;
-    int mes;cin>>mes;
-    int anio;cin>>anio;
-    eventos.push_back(Evento(nombre,dia,mes,anio));
-    if(registroLectura.fail()){
-        cout<<"No se pudo abrir el registro";
+    string dia;
+    string mes;
+    string anio;
+    cin>>dia;
+    cin>>mes;
+    cin>>anio;
+
+    try{
+        int a=stoi(dia);
+        int b=stoi(mes);
+        int c=stoi(anio);
+        eventos.push_back(Evento(nombre,a,b,c));
+        registroEcritura.open("Registro.txt",ios::out|ios::app);
+        registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl;
+        registroEcritura.close();
+        return Evento(nombre,a,b,c);
     }
-    registroEcritura.open("Registro.txt",ios::out|ios::app);
-    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl;
-    registroEcritura.close();
-    return Evento(nombre,dia,mes,anio);
+    catch(exception e){
+        throw "Por favor ingrese la fecha con el formato especificado\n\n";
+    }
 }
 
 
@@ -288,25 +305,34 @@ void capturaImprovedEvento(vector<improvedEvento>&improvedeventos){
     string nombre;
     getline(cin,nombre);
     cout<<"Ingrese la fecha del evento con el formato DD MM AAAA"<<endl;
-    int dia;cin>>dia;
-    int mes;cin>>mes;
-    int anio;cin>>anio;
-    cout<<"Ingrese el lugar del evento"<<endl;
-    limpiarBuffer();
-    string lugar;
-    getline(cin,lugar);
-    cout<<"Ingrese una descripcion"<<endl;
-    string descripcion;
-    getline(cin,descripcion);
-    improvedeventos.push_back(improvedEvento(nombre,dia,mes,anio,lugar,descripcion));
 
-    if(registroLectura.fail()){
-        cout<<"No se pudo abrir el registro";
+    string dia;
+    string mes;
+    string anio;
+    cin>>dia;
+    cin>>mes;
+    cin>>anio;
+
+    try{
+        int a=stoi(dia);
+        int b=stoi(mes);
+        int c=stoi(anio);
+        cout<<"Ingrese el lugar del evento"<<endl;
+        limpiarBuffer();
+        string lugar;
+        getline(cin,lugar);
+        cout<<"Ingrese una descripcion"<<endl;
+        string descripcion;
+        getline(cin,descripcion);
+        improvedeventos.push_back(improvedEvento(nombre,a,b,c,lugar,descripcion));
+
+        registroEcritura.open("Registro2.txt",ios::out|ios::app);
+        registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl<<lugar<<endl<<descripcion<<endl;
+        registroEcritura.close();
     }
-
-    registroEcritura.open("Registro2.txt",ios::out|ios::app);
-    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl<<lugar<<endl<<descripcion<<endl;
-    registroEcritura.close();
+    catch(exception e){
+        cout<<"Por favor ingrese la fecha con el formato especificado"<<endl<<endl;
+    }
 }
 
 improvedEvento crearImprovedEvento(vector<improvedEvento>&improvedEventos){
@@ -315,26 +341,33 @@ improvedEvento crearImprovedEvento(vector<improvedEvento>&improvedEventos){
     string nombre;
     getline(cin,nombre);
     cout<<"Ingrese la fecha del evento con el formato DD MM AAAA"<<endl;
-    int dia;cin>>dia;
-    int mes;cin>>mes;
-    int anio;cin>>anio;
-    cout<<"Ingrese el lugar del evento"<<endl;
-    limpiarBuffer();
-    string lugar;
-    getline(cin,lugar);
-    cout<<"Ingrese una descripcion"<<endl;
-    string descripcion;
-    getline(cin,descripcion);
-    improvedEventos.push_back(improvedEvento(nombre,dia,mes,anio,lugar,descripcion));
-    if(registroLectura.fail()){
-        cout<<"No se pudo abrir el registro";
+    string dia;
+    string mes;
+    string anio;
+    cin>>dia;
+    cin>>mes;
+    cin>>anio;
+    try{
+        int a=stoi(dia);
+        int b=stoi(mes);
+        int c=stoi(anio);
+        cout<<"Ingrese el lugar del evento"<<endl;
+        limpiarBuffer();
+        string lugar;
+        getline(cin,lugar);
+        cout<<"Ingrese una descripcion"<<endl;
+        string descripcion;
+        getline(cin,descripcion);
+        improvedEventos.push_back(improvedEvento(nombre,a,b,c,lugar,descripcion));
+        registroEcritura.open("Registro2.txt",ios::out|ios::app);
+        registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl<<lugar<<endl<<descripcion<<"\n";
+        registroEcritura.close();
+        return improvedEvento(nombre,a,b,c,lugar,descripcion);
     }
-    registroEcritura.open("Registro2.txt",ios::out|ios::app);
-    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl<<lugar<<endl<<descripcion<<"\n";
-    registroEcritura.close();
-
-
-    return improvedEvento(nombre,dia,mes,anio,lugar,descripcion);
+    catch(exception e){
+        throw "Por favor ingrese la fecha con el formato especificado\n\n";
+    }
+    
 }
 
 
