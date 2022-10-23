@@ -106,6 +106,8 @@ int main(){
             }
             
             case 4:
+                buscar(eventos,improvedeventos);
+
                 break;
 
             case 5:
