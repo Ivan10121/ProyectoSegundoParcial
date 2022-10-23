@@ -6,7 +6,7 @@ int main(){
     vector<improvedEvento>improvedeventos;
     obtenerRegistro(eventos);
     obtenerRegistro(improvedeventos);
-
+   
     int opcion=0;
     do{
         menu();
@@ -92,11 +92,14 @@ int main(){
                 break;
 
             case 2:
+                modificarEvento(eventos,improvedeventos);
                 break;
 
             case 3:
-                break;
-
+            {
+                quitar(eventos,improvedeventos);
+            }
+            
             case 4:
                 break;
 
