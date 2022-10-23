@@ -10,7 +10,7 @@ using namespace std;
 
 void menu(){
     cout<<"Elija una opcion"<<endl;
-    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Generar txt con resumen de eventos"<<endl;
+    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Buscar evento"<<endl;
 }
 
 bool archivo_existe(string nombre)
@@ -844,6 +844,37 @@ void actualizarTxt(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos
     }
 }
 
+void buscar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+    cout<<"Ingrese el nombre del evento que desea busacar"<<endl;
+    limpiarBuffer();
+    string nombre;getline(cin,nombre);
+    map<string,Evento> mapa1;
+    map<string,improvedEvento> mapa2;
+    
+    for(auto it=eventos.begin();it != eventos.end(); it++){
+        Evento aux=*it;
+        string cad=aux.getNombre();
+        mapa1.insert(make_pair(cad,aux));
+    }
+
+    for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
+        improvedEvento aux=*it;
+        string cad=aux.getNombre();
+        mapa2.insert(make_pair(cad,aux));
+    }
+
+    if(mapa1.find(nombre) != mapa1.end()){
+        auto it=mapa1.find(nombre);
+        Evento aux=it->second;
+        cout<<aux.mostrar()<<endl<<endl;
+    }
+
+    if(mapa2.find(nombre) != mapa2.end()){
+        auto it=mapa2.find(nombre);
+        improvedEvento aux=it->second;
+        cout<<aux.mostrar()<<endl<<endl;
+    }
+}
 
 
 
