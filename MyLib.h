@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <string.h>
+#include <map>
 
 
 using namespace std;
@@ -170,6 +171,9 @@ class Evento
         Evento();
         Evento(string,int,int,int);
         Fecha getFecha();
+        void setDia(int);
+        void setMes(int);
+        void setAnio(int);
         void setFecha(int,int,int);
         void setNombre(string);
         string getNombre();
@@ -193,16 +197,15 @@ void capturaEvento(vector<Evento>&eventos){
     eventos.push_back(Evento(nombre,dia,mes,anio));
     
     if(registroLectura.fail()){
-            cout<<"No se pudo abrir el registro";
-        }
+        cout<<"No se pudo abrir el registro";
+    }
 
     registroEcritura.open("Registro.txt",ios::out|ios::app);
     registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl;
     registroEcritura.close();
-
 }
 
-Evento crearEvento(){
+Evento crearEvento(vector<Evento>&eventos){
     cout<<"Ingrese el nombre del evento"<<endl;
     limpiarBuffer();
     string nombre;
@@ -211,6 +214,13 @@ Evento crearEvento(){
     int dia;cin>>dia;
     int mes;cin>>mes;
     int anio;cin>>anio;
+    eventos.push_back(Evento(nombre,dia,mes,anio));
+    if(registroLectura.fail()){
+        cout<<"No se pudo abrir el registro";
+    }
+    registroEcritura.open("Registro.txt",ios::out|ios::app);
+    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl;
+    registroEcritura.close();
     return Evento(nombre,dia,mes,anio);
 }
 
@@ -220,6 +230,18 @@ Evento::Evento(){}
 Evento::Evento(string nombre,int dia,int mes,int anio){
     fechaEvento=Fecha(dia,mes,anio);
     this->nombre=nombre;
+}
+
+void Evento::setDia(int x){
+    fechaEvento.setDia(x);
+}
+
+void Evento::setMes(int x){
+    fechaEvento.setMes(x);
+}
+
+void Evento::setAnio(int x){
+    fechaEvento.setAnio(x);
 }
 
 void Evento::setFecha(int dia,int mes,int anio){
@@ -277,9 +299,18 @@ void capturaImprovedEvento(vector<improvedEvento>&improvedeventos){
     string descripcion;
     getline(cin,descripcion);
     improvedeventos.push_back(improvedEvento(nombre,dia,mes,anio,lugar,descripcion));
+
+    if(registroLectura.fail()){
+        cout<<"No se pudo abrir el registro";
+    }
+
+    registroEcritura.open("Registro2.txt",ios::out|ios::app);
+    registroEcritura<<nombre<<endl<<dia<<endl<<mes<<endl<<anio<<endl<<lugar<<endl<<descripcion<<endl;
+    registroEcritura.close();
 }
 
 improvedEvento crearImprovedEvento(vector<improvedEvento>&improvedEventos){
+    limpiarBuffer();
     cout<<"Ingrese el nombre del evento"<<endl;
     string nombre;
     getline(cin,nombre);
@@ -401,12 +432,70 @@ void obtenerRegistro(vector<improvedEvento>& improvedeventos){
     }
 }
 
-
-
-void repetirEvento(improvedEvento evento,int x,vector<improvedEvento>&improvedeventos){
+void repetirEvento(Evento evento,int x,vector<Evento>&eventos,int frec){
     if(x==1){
         Fecha aux=evento.getFecha();
-        for(int i=0;i<1;i++){
+        for(int i=0;i<48;i++){
+            for(int j=0;j<7;j++){
+                aux.avanzarDia();
+            }
+            eventos.push_back(Evento(evento.getNombre(),aux.getDia(),aux.getMes(),aux.getAnio()));
+            registroEcritura.open("Registro.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<aux.getMes()<<endl<<aux.getAnio()<<endl;
+            registroEcritura.close();
+        }
+    }
+    if(x==2){
+        Fecha aux=evento.getFecha();
+        int mes=aux.getMes();
+        int anio=aux.getAnio();
+        for(int i=0;i<12;i++){
+            mes++;
+            if(mes==13){
+                mes=1;
+                anio++;
+            }
+            eventos.push_back(Evento(evento.getNombre(),aux.getDia(),mes,anio));
+            registroEcritura.open("Registro.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<mes<<endl<<anio<<endl;
+            registroEcritura.close();
+        }
+    }
+
+    if(x==3){
+        Fecha aux=evento.getFecha();
+        int anio=aux.getAnio();
+        for(int i=0;i<5;i++){
+            anio++;
+            eventos.push_back(Evento(evento.getNombre(),aux.getDia(),aux.getMes(),anio));
+            registroEcritura.open("Registro.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<aux.getMes()<<endl<<anio<<endl;
+            registroEcritura.close();
+        }
+    }
+
+    if(x==4){
+        Fecha aux=evento.getFecha();
+        for(int i=0;i<10;i++){
+            for(int j=0;j<frec;j++){
+                aux.avanzarDia();
+            }
+            eventos.push_back(Evento(evento.getNombre(),aux.getDia(),aux.getMes(),aux.getAnio()));
+            registroEcritura.open("Registro.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<aux.getMes()<<endl<<aux.getAnio()<<endl;
+            registroEcritura.close();
+        }
+        
+    }
+}
+
+
+
+
+void repetirEvento(improvedEvento evento,int x,vector<improvedEvento>&improvedeventos,int frec){
+    if(x==1){
+        Fecha aux=evento.getFecha();
+        for(int i=0;i<48;i++){
             for(int j=0;j<7;j++){
                 aux.avanzarDia();
             }
@@ -417,17 +506,272 @@ void repetirEvento(improvedEvento evento,int x,vector<improvedEvento>&improvedev
         }
     }
     if(x==2){
-        
+        Fecha aux=evento.getFecha();
+        int mes=aux.getMes();
+        int anio=aux.getAnio();
+        for(int i=0;i<12;i++){
+            mes++;
+            if(mes==13){
+                mes=1;
+                anio++;
+            }
+            improvedeventos.push_back(improvedEvento(evento.getNombre(),aux.getDia(),mes,anio,evento.getLugar(),evento.getDescripcion()));
+            registroEcritura.open("Registro2.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<mes<<endl<<anio<<endl<<evento.getLugar()<<endl<<evento.getDescripcion()<<endl;
+            registroEcritura.close();
+        }
     }
 
     if(x==3){
-        
+        Fecha aux=evento.getFecha();
+        int anio=aux.getAnio();
+        for(int i=0;i<5;i++){
+            anio++;
+            improvedeventos.push_back(improvedEvento(evento.getNombre(),aux.getDia(),aux.getMes(),anio,evento.getLugar(),evento.getDescripcion()));
+            registroEcritura.open("Registro2.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<aux.getMes()<<endl<<anio<<endl<<evento.getLugar()<<endl<<evento.getDescripcion()<<endl;
+            registroEcritura.close();
+        }
     }
 
     if(x==4){
+        Fecha aux=evento.getFecha();
+        for(int i=0;i<10;i++){
+            for(int j=0;j<frec;j++){
+                aux.avanzarDia();
+            }
+            improvedeventos.push_back(improvedEvento(evento.getNombre(),aux.getDia(),aux.getMes(),aux.getAnio(),evento.getLugar(),evento.getDescripcion()));
+            registroEcritura.open("Registro2.txt",ios::out|ios::app);
+            registroEcritura<<evento.getNombre()<<endl<<aux.getDia()<<endl<<aux.getMes()<<endl<<aux.getAnio()<<endl<<evento.getLugar()<<endl<<evento.getDescripcion()<<endl;
+            registroEcritura.close();
+        }
         
     }
 }
+
+void modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+    bool vec1=false,vec2=false;
+    cout<<"Ingrese el nombre del evento que desea modificar"<<endl;
+    limpiarBuffer();
+    string nombre;getline(cin,nombre);
+    map<string,Evento> mapa1;
+    map<string,improvedEvento> mapa2;
+
+    for(auto it=eventos.begin();it != eventos.end(); it++){
+        Evento aux=*it;
+        string cad=aux.getNombre();
+        mapa1.insert(make_pair(cad,aux));
+    }
+
+    for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
+        improvedEvento aux=*it;
+        string cad=aux.getNombre();
+        mapa2.insert(make_pair(cad,aux));
+    }
+
+    if(mapa1.find(nombre) != mapa1.end()){
+        vec1=true;
+    }
+    if(mapa2.find(nombre) != mapa2.end()){
+        vec2=true;
+    }
+
+    if(!vec1 && !vec2){
+        cout<<"El evento no existe"<<endl;
+    }
+
+    if(vec1){
+        for(int i=0;i<eventos.size();i++){
+            string nom;
+            nom=eventos[i].getNombre();
+            string cad;
+            int dia,mes,anio;
+
+            if(nom.compare(nombre)==0){
+                int op;
+                cout<<"Que desea modificar?"<<endl;
+                printf("1.Nombre            2.Dia          3.Mes            4.A%co\n",164);
+                cin>>op;
+
+                switch (op)
+                {
+                case 1:
+                    cout<<"Ingrese el nuevo nombre"<<endl;
+                    limpiarBuffer();
+                    getline(cin,cad);
+                    eventos[i].setNombre(cad);
+                    break;
+
+                case 2:
+                    cout<<"Ingrese el nuevo dia"<<endl;
+                    limpiarBuffer();
+                    cin>>dia;
+                    eventos[i].setDia(dia);
+                    break;
+
+                case 3:
+                    cout<<"Ingrese el nuevo mes"<<endl;
+                    limpiarBuffer();
+                    cin>>dia;
+                    eventos[i].setMes(dia);
+                    break;
+
+                case 4:
+                    printf("Ingrese el nuevo a%co\n",164);
+                    limpiarBuffer();
+                    cin>>dia;
+                    eventos[i].setAnio(dia);
+                    break;
+                }
+            }
+        }
+    }
+
+    if(vec2){
+        for(int i=0;i<improvedeventos.size();i++){
+            string nom;
+            nom=improvedeventos[i].getNombre();
+            string cad;
+            int dia,mes,anio;
+
+            if(nom.compare(nombre)==0){
+                int op;
+                cout<<"Que desea modificar?"<<endl;
+                printf("1.Nombre            2.Dia          3.Mes            4.A%co          5.Lugar         6.Descripcion\n",164);
+                cin>>op;
+
+                switch (op)
+                {
+                case 1:
+                    cout<<"Ingrese el nuevo nombre"<<endl;
+                    limpiarBuffer();
+                    getline(cin,cad);
+                    improvedeventos[i].setNombre(cad);
+                    break;
+
+                case 2:
+                    cout<<"Ingrese el nuevo dia"<<endl;
+                    limpiarBuffer();
+                    cin>>dia;
+                    improvedeventos[i].setDia(dia);
+                    break;
+
+                case 3:
+                    cout<<"Ingrese el nuevo mes"<<endl;
+                    limpiarBuffer();
+                    cin>>dia;
+                    improvedeventos[i].setMes(dia);
+                    break;
+
+                case 4:
+                    printf("Ingrese el nuevo a%co\n",164);
+                    limpiarBuffer();
+                    cin>>dia;
+                    improvedeventos[i].setAnio(dia);
+                    break;
+
+                case 5:
+                    cout<<"Ingrese el nuevo lugar"<<endl;
+                    limpiarBuffer();
+                    getline(cin,cad);
+                    improvedeventos[i].setLugar(cad);
+                    break;
+
+                case 6:
+                    cout<<"Ingrese la nueva descripcion"<<endl;
+                    limpiarBuffer();
+                    getline(cin,cad);
+                    improvedeventos[i].setDescripcion(cad);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
+void quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+    bool vec1,vec2;
+    cout<<"Ingrese el nombre del evento que desea eliminar"<<endl;
+    limpiarBuffer();
+    string nombre;
+    getline(cin,nombre);
+    map<string,Evento> mapa1;
+    map<string,improvedEvento> mapa2;
+
+    for(auto it=eventos.begin();it != eventos.end(); it++){
+        Evento aux=*it;
+        string cad=aux.getNombre();
+        mapa1.insert(make_pair(cad,aux));
+    }
+
+    for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
+        improvedEvento aux=*it;
+        string cad=aux.getNombre();
+        mapa2.insert(make_pair(cad,aux));
+    }
+
+    if(mapa1.find(nombre) != mapa1.end()){
+        vec1=true;
+    }
+    if(mapa2.find(nombre) != mapa2.end()){
+        vec2=true;
+    }
+
+    if(!vec1 && !vec2){
+        cout<<"El evento que desea eliminar no existe"<<endl;
+    }
+
+    if(vec1){
+        if(eventos.size()>1){
+            for(auto it=eventos.begin();it!=eventos.end();++it){
+                Evento aux=*it;
+                string cad=aux.getNombre();
+                if(cad==nombre){
+                    eventos.erase(it);
+                }
+            }
+        }else{
+            eventos.clear();
+        }
+    }
+
+    if(vec2){
+        if(improvedeventos.size()>1){
+            for(auto it=improvedeventos.begin();it!=improvedeventos.end();++it){
+                improvedEvento aux=*it;
+                string cad=aux.getNombre();
+                if(cad==nombre){
+                    improvedeventos.erase(it);
+                }
+            }
+        }else{
+            improvedeventos.clear();
+        }
+    }
+
+
+
+
+}
+
+void quitar(vector<Evento>&eventos,string a){
+
+    if(eventos.size()>1){
+        for(auto it=eventos.begin();it!=eventos.end();++it){
+            Evento aux=*it;
+            string nombre=aux.getNombre();
+            if(a==nombre){
+                eventos.erase(it);
+            }
+        }
+    }else{
+        eventos.clear();
+    }
+}
+
+
+
 
 
 
