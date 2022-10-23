@@ -549,7 +549,7 @@ void repetirEvento(improvedEvento evento,int x,vector<improvedEvento>&improvedev
     }
 }
 
-void modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
     bool vec1=false,vec2=false;
     cout<<"Ingrese el nombre del evento que desea modificar"<<endl;
     limpiarBuffer();
@@ -581,116 +581,142 @@ void modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevent
     }
 
     if(vec1){
-        for(int i=0;i<eventos.size();i++){
-            string nom;
-            nom=eventos[i].getNombre();
+        int op;
+        cout<<"Que desea modificar?"<<endl;
+        printf("1.Nombre            2.Dia          3.Mes            4.A%co\n",164);
+        cin>>op;
+
+        if(op==1){
             string cad;
-            int dia,mes,anio;
-
-            if(nom.compare(nombre)==0){
-                int op;
-                cout<<"Que desea modificar?"<<endl;
-                printf("1.Nombre            2.Dia          3.Mes            4.A%co\n",164);
-                cin>>op;
-
-                switch (op)
-                {
-                case 1:
-                    cout<<"Ingrese el nuevo nombre"<<endl;
-                    limpiarBuffer();
-                    getline(cin,cad);
+            cout<<"Ingrese el nuevo nombre"<<endl;
+            limpiarBuffer();
+            getline(cin,cad);
+            for(int i=0;i<eventos.size();i++){
+                if(eventos[i].getNombre().compare(nombre)==0){
                     eventos[i].setNombre(cad);
-                    break;
+                }
+            }
 
-                case 2:
-                    cout<<"Ingrese el nuevo dia"<<endl;
-                    limpiarBuffer();
-                    cin>>dia;
+        }
+
+        if(op==2){
+            int dia;
+            cout<<"Ingrese el nuevo dia"<<endl;
+            cin>>dia;
+            for(int i=0;i<eventos.size();i++){
+                if(eventos[i].getNombre().compare(nombre)==0){
                     eventos[i].setDia(dia);
-                    break;
-
-                case 3:
-                    cout<<"Ingrese el nuevo mes"<<endl;
-                    limpiarBuffer();
-                    cin>>dia;
-                    eventos[i].setMes(dia);
-                    break;
-
-                case 4:
-                    printf("Ingrese el nuevo a%co\n",164);
-                    limpiarBuffer();
-                    cin>>dia;
-                    eventos[i].setAnio(dia);
-                    break;
                 }
             }
         }
+
+        if(op==3){
+            int mes;
+            cout<<"Ingrese el nuevo mes"<<endl;
+            cin>>mes;
+            for(int i=0;i<eventos.size();i++){
+                if(eventos[i].getNombre().compare(nombre)==0){
+                    eventos[i].setMes(mes);
+                }
+            }
+        }
+
+        if(op==4){
+            int anio;
+            printf("Ingrese el nuevo a%co\n",164);            
+            cin>>anio;
+            for(int i=0;i<eventos.size();i++){
+                if(eventos[i].getNombre().compare(nombre)==0){
+                    eventos[i].setAnio(anio);
+                }
+            }
+        }
+        return 1;
     }
 
     if(vec2){
-        for(int i=0;i<improvedeventos.size();i++){
-            string nom;
-            nom=improvedeventos[i].getNombre();
+        int op;
+        cout<<"Que desea modificar?"<<endl;
+        printf("1.Nombre            2.Dia          3.Mes            4.A%co          5.Lugar         6.Descripcion\n",164);
+        cin>>op;
+
+        if(op==1){
             string cad;
-            int dia,mes,anio;
-
-            if(nom.compare(nombre)==0){
-                int op;
-                cout<<"Que desea modificar?"<<endl;
-                printf("1.Nombre            2.Dia          3.Mes            4.A%co          5.Lugar         6.Descripcion\n",164);
-                cin>>op;
-
-                switch (op)
-                {
-                case 1:
-                    cout<<"Ingrese el nuevo nombre"<<endl;
-                    limpiarBuffer();
-                    getline(cin,cad);
+            cout<<"Ingrese el nuevo nombre"<<endl;
+            limpiarBuffer();
+            getline(cin,cad);
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
                     improvedeventos[i].setNombre(cad);
-                    break;
-
-                case 2:
-                    cout<<"Ingrese el nuevo dia"<<endl;
-                    limpiarBuffer();
-                    cin>>dia;
-                    improvedeventos[i].setDia(dia);
-                    break;
-
-                case 3:
-                    cout<<"Ingrese el nuevo mes"<<endl;
-                    limpiarBuffer();
-                    cin>>dia;
-                    improvedeventos[i].setMes(dia);
-                    break;
-
-                case 4:
-                    printf("Ingrese el nuevo a%co\n",164);
-                    limpiarBuffer();
-                    cin>>dia;
-                    improvedeventos[i].setAnio(dia);
-                    break;
-
-                case 5:
-                    cout<<"Ingrese el nuevo lugar"<<endl;
-                    limpiarBuffer();
-                    getline(cin,cad);
-                    improvedeventos[i].setLugar(cad);
-                    break;
-
-                case 6:
-                    cout<<"Ingrese la nueva descripcion"<<endl;
-                    limpiarBuffer();
-                    getline(cin,cad);
-                    improvedeventos[i].setDescripcion(cad);
-                    break;
                 }
             }
         }
+
+        if(op==2){
+            int dia;
+            cout<<"Ingrese el nuevo dia"<<endl;
+            cin>>dia;
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
+                    improvedeventos[i].setDia(dia);
+                }
+            }
+        }
+
+        if(op==3){
+            int mes;
+            cout<<"Ingrese el nuevo mes"<<endl;
+            cin>>mes;
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
+                    improvedeventos[i].setMes(mes);
+                }
+            }
+        }
+
+        if(op==4){
+            int anio;
+            printf("Ingrese el nuevo a%co\n",164);
+            cin>>anio;
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
+                    improvedeventos[i].setAnio(anio);
+                }
+            }
+        }
+
+        if(op==5){
+            string cad;
+            cout<<"Ingrese el nuevo lugar"<<endl;
+            limpiarBuffer();
+            getline(cin,cad);
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
+                    improvedeventos[i].setLugar(cad);
+                }
+            }
+        }
+
+        if(op==6){
+            string cad;
+            cout<<"Ingrese la nueva descripcion"<<endl;
+            limpiarBuffer();
+            getline(cin,cad);
+            for(int i=0;i<improvedeventos.size();i++){
+                if(improvedeventos[i].getNombre().compare(nombre)==0){
+                    improvedeventos[i].setDescripcion(cad);
+                }
+            }
+        }
+        return 2;
+    }
+    else{
+        return 0;
     }
 }
 
 
-void quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+int quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
     bool vec1,vec2;
     cout<<"Ingrese el nombre del evento que desea eliminar"<<endl;
     limpiarBuffer();
@@ -734,6 +760,7 @@ void quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         }else{
             eventos.clear();
         }
+        return 1;
     }
 
     if(vec2){
@@ -748,25 +775,39 @@ void quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         }else{
             improvedeventos.clear();
         }
+        return 2;
     }
-
-
-
-
+    else{
+        return 0;
+    }
 }
 
-void quitar(vector<Evento>&eventos,string a){
 
-    if(eventos.size()>1){
-        for(auto it=eventos.begin();it!=eventos.end();++it){
+void actualizarTxt(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos,int x){
+    ofstream auxiliar;
+
+    if(x==1){
+        auxiliar.open("Auxiliar.txt",ios::out|ios::app);
+        for(auto it=eventos.begin();it!=eventos.end();it++){
             Evento aux=*it;
-            string nombre=aux.getNombre();
-            if(a==nombre){
-                eventos.erase(it);
-            }
+            Fecha fechaaux=aux.getFecha();
+            auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl;
         }
-    }else{
-        eventos.clear();
+        auxiliar.close();
+        remove("Registro.txt");
+        rename("Auxiliar.txt","Registro.txt");
+    }
+
+    if(x==2){
+        auxiliar.open("Auxiliar.txt",ios::out|ios::app);
+        for(auto it=improvedeventos.begin();it!=improvedeventos.end();it++){
+            improvedEvento aux=*it;
+            Fecha fechaaux=aux.getFecha();
+            auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl<<aux.getLugar()<<endl<<aux.getDescripcion()<<endl;
+        }
+        auxiliar.close();
+        remove("Registro2.txt");
+        rename("Auxiliar.txt","Registro2.txt");
     }
 }
 
