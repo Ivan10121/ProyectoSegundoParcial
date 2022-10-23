@@ -92,12 +92,17 @@ int main(){
                 break;
 
             case 2:
-                modificarEvento(eventos,improvedeventos);
+            {
+                int y=modificarEvento(eventos,improvedeventos);
+                actualizarTxt(eventos,improvedeventos,y);
                 break;
+            }
 
             case 3:
             {
-                quitar(eventos,improvedeventos);
+                int y=quitar(eventos,improvedeventos);
+                actualizarTxt(eventos,improvedeventos,y);
+                break;
             }
             
             case 4:
