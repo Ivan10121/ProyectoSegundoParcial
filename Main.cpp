@@ -6,7 +6,8 @@ int main(){
     vector<improvedEvento>improvedeventos;
     obtenerRegistro(eventos);
     obtenerRegistro(improvedeventos);
-   
+
+
     int opcion=0;
     do{
         menu();
@@ -94,14 +95,26 @@ int main(){
             case 2:
             {
                 int y=modificarEvento(eventos,improvedeventos);
-                actualizarTxt(eventos,improvedeventos,y);
+                pthread_t hilo;
+                if(y==1){
+                    pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
+                }
+                if(y==2){
+                    pthread_create(&hilo,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
+                }
                 break;
             }
 
             case 3:
             {
                 int y=quitar(eventos,improvedeventos);
-                actualizarTxt(eventos,improvedeventos,y);
+                pthread_t hilo;
+                if(y==1){
+                    pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
+                }
+                if(y==2){
+                    pthread_create(&hilo,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
+                }
                 break;
             }
             
@@ -119,6 +132,10 @@ int main(){
                 if(op==2){
                     cuentaDias();
                 }
+                break;
+
+            case 6:
+                generarTxt(eventos,improvedeventos);
                 break;
 
             case 9:
