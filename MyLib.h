@@ -10,7 +10,7 @@ using namespace std;
 
 void menu(){
     cout<<"Elija una opcion"<<endl;
-    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Buscar evento"<<endl;
+    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Buscar evento"<<endl<<"5.Dias restantes"<<endl<<"6.Generar txt con resumen del mes"<<endl;
 }
 
 bool archivo_existe(string nombre)
@@ -40,12 +40,6 @@ class Fecha
 
     public:
 
-        time_t now=time(0);
-        tm*tiempo=localtime(&now);
-        int diahoy=tiempo->tm_mday;
-        int meshoy=tiempo->tm_mon+1;
-        int aniohoy=(tiempo->tm_year-100)+2000;
-        //int hora=tiempo->tm_hour;
 
         Fecha();
         Fecha(int,int,int);
@@ -59,9 +53,40 @@ class Fecha
         void setAnio(int);
         void setFecha(int,int,int);
         void avanzarDia();
-        int diasRestantes(Fecha);
         ~Fecha();
+
+        const bool operator>(const Fecha & other){
+            bool res=false;
+            if(this->anio>other.anio){
+                res=true;
+                return res;
+            }
+            if(this->mes > other.mes  &&  this->anio > other.anio){
+                res=true;
+                return true;
+            }
+            if(this->dia > other.dia  &&  this->mes > other.mes &&  this->anio > other.anio){
+                res=true;
+                return res;
+            }
+            if(this->dia > other.dia  &&  this->mes <= other.mes &&  this->anio <= other.anio){
+                res=true;
+                return res;
+            }
+
+            return res;
+        }
 };
+
+time_t now=time(0);
+tm*tiempo=localtime(&now);
+int diahoy=tiempo->tm_mday;
+int meshoy=tiempo->tm_mon+1;
+int aniohoy=(tiempo->tm_year-100)+2000;
+Fecha todayy=Fecha(diahoy,meshoy,aniohoy);
+
+
+
 
 Fecha::Fecha(){}
 
@@ -148,7 +173,10 @@ int diasRestantes(Fecha a){
     int diahoy=tiempo->tm_mday;
     int meshoy=tiempo->tm_mon+1;
     int aniohoy=(tiempo->tm_year-100)+2000;
+
+
     Fecha hoy=Fecha(diahoy,meshoy,aniohoy);
+
     int contador=0;
     while(iguales(hoy,a)==false){
         hoy.avanzarDia();
@@ -408,10 +436,6 @@ void obtenerRegistro(vector<Evento>& eventos){
 
     if(existe){
         
-        if(registroLectura.fail()){
-            cout<<"No se pudo abrir el registro";
-        }
-
         registroLectura.open("Registro.txt",ios::out|ios::app);
 
 
@@ -436,11 +460,7 @@ void obtenerRegistro(vector<improvedEvento>& improvedeventos){
     bool existe=archivo_existe("Registro2.txt");
 
     if(existe){
-        
-        if(registroLectura.fail()){
-            cout<<"No se pudo abrir el registro"<<endl;
-        }
-
+    
         registroLectura.open("Registro2.txt",ios::out|ios::app);
 
 
@@ -863,6 +883,10 @@ void buscar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         mapa2.insert(make_pair(cad,aux));
     }
 
+    if(mapa1.find(nombre)==mapa1.end() && mapa2.find(nombre)==mapa2.end()){
+        cout<<"El evento no existe"<<endl<<endl;
+    }
+
     if(mapa1.find(nombre) != mapa1.end()){
         auto it=mapa1.find(nombre);
         Evento aux=it->second;
@@ -875,6 +899,82 @@ void buscar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         cout<<aux.mostrar()<<endl<<endl;
     }
 }
+
+void cuentaDias(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+    cout<<"Ingrese el nombre del evento que desea busacar"<<endl;
+    limpiarBuffer();
+    string nombre;getline(cin,nombre);
+    map<string,Evento> mapa1;
+    map<string,improvedEvento> mapa2;
+    
+    for(auto it=eventos.begin();it != eventos.end(); it++){
+        Evento aux=*it;
+        string cad=aux.getNombre();
+        mapa1.insert(make_pair(cad,aux));
+    }
+
+    for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
+        improvedEvento aux=*it;
+        string cad=aux.getNombre();
+        mapa2.insert(make_pair(cad,aux));
+    }
+
+    if(mapa1.find(nombre)==mapa1.end() && mapa2.find(nombre)==mapa2.end()){
+        cout<<"El evento no existe"<<endl<<endl;
+    }
+
+    if(mapa1.find(nombre) != mapa1.end()){
+        auto it=mapa1.find(nombre);
+        Evento aux=it->second;
+        Fecha a=aux.getFecha();
+        if(todayy>a){
+            printf("Este evento ya pas%c\n\n",162);
+        }else{
+            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" para este evento"<<endl;
+        }
+    }
+
+    if(mapa2.find(nombre) != mapa2.end()){
+        auto it=mapa2.find(nombre);
+        improvedEvento aux=it->second;
+        Fecha a=aux.getFecha();
+        if(todayy>a){
+            printf("Este evento ya pas%c\n\n",162);
+        }else{
+            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" dias para este evento"<<endl;
+        }
+    }
+}
+
+void cuentaDias(){
+    cout<<"Ingrese la fecha del evento con el formato DD MM AAAA"<<endl;
+    limpiarBuffer();
+    string dia;
+    string mes;
+    string anio;
+    cin>>dia;
+    cin>>mes;
+    cin>>anio;
+    try{
+        int a=stoi(dia);
+        int b=stoi(mes);
+        int c=stoi(anio);
+        Fecha aux=Fecha(a,b,c);
+        if(todayy>aux){
+            printf("Esta fecha ya pas%c\n\n",162);
+        }else{
+            cout<<"Fatan "<<diasRestantes(aux)<<" dias para esta fecha"<<endl;
+        }
+
+    }
+    catch(exception e){
+        cout<<"Por favor ingrese la fecha con el formato especificado"<<endl<<endl;
+    }
+}
+
+
+
+
 
 
 
