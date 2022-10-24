@@ -4,6 +4,8 @@
 #include <vector>
 #include <string.h>
 #include <map>
+#include <pthread.h>
+#include <set>
 
 using namespace std;
 
@@ -54,7 +56,7 @@ class Fecha
         void avanzarDia();
         ~Fecha();
 
-        const bool operator>(const Fecha & other){
+        bool operator>(const Fecha & other){
             bool res=false;
             if(this->anio>other.anio){
                 res=true;
@@ -72,7 +74,28 @@ class Fecha
                 res=true;
                 return res;
             }
+            return res;
+        }
 
+        bool operator<(const Fecha &other) const 
+        {
+             bool res=true;
+            if(this->anio>other.anio){
+                res=false;
+                return res;
+            }
+            if(this->mes > other.mes  &&  this->anio > other.anio){
+                res=false;
+                return true;
+            }
+            if(this->dia > other.dia  &&  this->mes > other.mes &&  this->anio > other.anio){
+                res=false;
+                return res;
+            }
+            if(this->dia > other.dia  &&  this->mes <= other.mes &&  this->anio <= other.anio){
+                res=false;
+                return res;
+            }
             return res;
         }
 };
@@ -190,9 +213,11 @@ Fecha::~Fecha(){}
 
 class Evento
 {
+    protected:
+    Fecha fechaEvento;
+
     private:
         string nombre;
-        Fecha fechaEvento;
 
     public:
         Evento();
@@ -205,6 +230,13 @@ class Evento
         void setNombre(string);
         string getNombre();
         virtual string mostrar();
+        bool operator<(const Evento &other) const
+        {
+            Evento aux=other;
+            Fecha a=aux.getFecha();
+            return fechaEvento<a;
+        }
+
         ~Evento();
 };
 
@@ -323,6 +355,13 @@ class improvedEvento:public Evento
         string getLugar();
         string getDescripcion();
         string mostrar();
+        bool operator<(const improvedEvento &other) const
+        {
+            improvedEvento aux=other;
+            Fecha a=aux.getFecha();
+            Fecha b=this->fechaEvento;
+            return b<a;
+        }
         ~improvedEvento();
 };
 
@@ -835,33 +874,39 @@ int quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
 }
 
 
-void actualizarTxt(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos,int x){
+void *actualizarTxt1(void *args){
+
+    vector<Evento>&eventos=*reinterpret_cast<vector<Evento>*>(args);
+
     ofstream auxiliar;
 
-    if(x==1){
-        auxiliar.open("Auxiliar.txt",ios::out|ios::app);
-        for(auto it=eventos.begin();it!=eventos.end();it++){
-            Evento aux=*it;
-            Fecha fechaaux=aux.getFecha();
-            auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl;
-        }
-        auxiliar.close();
-        remove("Registro.txt");
-        rename("Auxiliar.txt","Registro.txt");
+    auxiliar.open("Auxiliar.txt",ios::out|ios::app);
+    for(auto it=eventos.begin();it!=eventos.end();it++){
+        Evento aux=*it;
+        Fecha fechaaux=aux.getFecha();
+        auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl;
     }
+    auxiliar.close();
+    remove("Registro.txt");
+    rename("Auxiliar.txt","Registro.txt");
+    pthread_exit(NULL);
 
-    if(x==2){
-        auxiliar.open("Auxiliar.txt",ios::out|ios::app);
-        for(auto it=improvedeventos.begin();it!=improvedeventos.end();it++){
-            improvedEvento aux=*it;
-            Fecha fechaaux=aux.getFecha();
-            auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl<<aux.getLugar()<<endl<<aux.getDescripcion()<<endl;
-        }
-        auxiliar.close();
-        remove("Registro2.txt");
-        rename("Auxiliar.txt","Registro2.txt");
-    }
 }
+
+void *actualizarTxt2(void *args){
+    vector<improvedEvento>&improvedeventos=*reinterpret_cast<vector<improvedEvento>*>(args);
+    ofstream auxiliar;
+    auxiliar.open("Auxiliar.txt",ios::out|ios::app);
+    for(auto it=improvedeventos.begin();it!=improvedeventos.end();it++){
+        improvedEvento aux=*it;
+        Fecha fechaaux=aux.getFecha();
+        auxiliar<<aux.getNombre()<<endl<<fechaaux.getDia()<<endl<<fechaaux.getMes()<<endl<<fechaaux.getAnio()<<endl<<aux.getLugar()<<endl<<aux.getDescripcion()<<endl;
+    }
+    auxiliar.close();
+    remove("Registro2.txt");
+    rename("Auxiliar.txt","Registro2.txt");
+}
+
 
 void buscar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
     cout<<"Ingrese el nombre del evento que desea busacar"<<endl;
@@ -971,29 +1016,37 @@ void cuentaDias(){
     }
 }
 
+void generarTxt(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+    set<Evento> set1;
+    set<improvedEvento> set2;
+    for(auto it=eventos.begin();it!=eventos.end();it++){
+        Evento aux=*it;
+        Fecha auxf=aux.getFecha();
+        if(auxf.getMes()==meshoy && auxf.getAnio()==aniohoy){
+            set1.insert(aux);
+        }
+    }
+
+    registroEcritura.open("Resumen del mes.txt",ios::out|ios::app);
+    for(auto it=set1.begin();it!=set1.end();it++){
+        Evento aux=*it;
+        Fecha fechaaux=aux.getFecha();
+        registroEcritura<<"Evento: "<<aux.getNombre()<<endl<<"Fecha: "<<fechaaux.getDia()<<"/"<<fechaaux.getMes()<<"/"<<fechaaux.getAnio()<<endl<<endl;
+    }
+    registroEcritura.close();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    for(auto it=improvedeventos.begin();it!=improvedeventos.end();it++){
+        improvedEvento aux=*it;
+        Fecha auxf=aux.getFecha();
+        if(auxf.getMes()==meshoy && auxf.getAnio()==aniohoy){
+            set2.insert(aux);
+        }
+    }
+    registroEcritura.open("Resumen del mes.txt",ios::out|ios::app);
+    for(auto it=set2.begin();it!=set2.end();it++){
+        improvedEvento aux=*it;
+        Fecha fechaaux=aux.getFecha();
+        registroEcritura<<"Evento: "<<aux.getNombre()<<endl<<"Fecha: "<<fechaaux.getDia()<<"/"<<fechaaux.getMes()<<"/"<<fechaaux.getAnio()<<endl<<"Lugar: "<<aux.getLugar()<<endl<<"Descripcion: "<<aux.getDescripcion()<<endl<<endl;
+    }
+}
