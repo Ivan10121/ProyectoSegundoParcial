@@ -1,7 +1,7 @@
 #include "MyLib.h"
 
 int main(){
-
+    
     vector<Evento>eventos;
     vector<improvedEvento>improvedeventos;
     obtenerRegistro(eventos);
@@ -107,10 +107,21 @@ int main(){
             
             case 4:
                 buscar(eventos,improvedeventos);
-
                 break;
 
             case 5:
+                int op;
+                cout<<"1.Dias restantes con un evento           2.Dias restantes con una fecha nueva"<<endl;
+                cin>>op;
+                if(op==1){
+                    cuentaDias(eventos,improvedeventos);
+                }
+                if(op==2){
+                    cuentaDias();
+                }
+                break;
+
+            case 9:
                 for(auto it=eventos.begin();it != eventos.end(); it++){
                     Evento aux=*it;
                     cout<<aux.mostrar()<<endl;
@@ -119,9 +130,6 @@ int main(){
                     improvedEvento aux=*it;
                     cout<<aux.mostrar()<<endl;
                 }
-                break;
-
-            case 9:
                 break;
             
             default:
