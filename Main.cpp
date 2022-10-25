@@ -1,9 +1,10 @@
-#include "MyLib.h"
+#include "Utilities.h"
 
 int main(){
     
     vector<Evento>eventos;
     vector<improvedEvento>improvedeventos;
+    insertarFechasFestivas(eventos);
     obtenerRegistro(eventos);
     obtenerRegistro(improvedeventos);
 
@@ -52,7 +53,6 @@ int main(){
                             capturaImprovedEvento(improvedeventos);
                             break;
                     }
-
                 }
                 else{
                     int op;
@@ -136,17 +136,6 @@ int main(){
 
             case 6:
                 generarTxt(eventos,improvedeventos);
-                break;
-
-            case 9:
-                for(auto it=eventos.begin();it != eventos.end(); it++){
-                    Evento aux=*it;
-                    cout<<aux.mostrar()<<endl;
-                }
-                for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
-                    improvedEvento aux=*it;
-                    cout<<aux.mostrar()<<endl;
-                }
                 break;
             
             default:
