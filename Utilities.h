@@ -802,3 +802,18 @@ void insertarFechasFestivas(vector<Evento>&eventos){
     eventos.push_back(ev10);
     eventos.push_back(ev11);
 }
+
+ pthread_mutex_t lock;
+
+void *verificar(void* args){
+    vector<Evento>&eventos=*reinterpret_cast<vector<Evento>*>(args);
+    while(true){
+        for(auto it=eventos.begin();it!=eventos.end();++it){
+            Evento aux=*it;
+            Fecha fechaaux=aux.getFecha();
+            if(fechaaux<todayy){
+                eventos.erase(it);
+            }
+        }
+    }
+}
