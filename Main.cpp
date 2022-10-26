@@ -1,12 +1,17 @@
 #include "Utilities.h"
 
 int main(){
-    
+    pthread_t hilo;
     vector<Evento>eventos;
     vector<improvedEvento>improvedeventos;
-    insertarFechasFestivas(eventos);
     obtenerRegistro(eventos);
     obtenerRegistro(improvedeventos);
+    pthread_t hilo3;
+    insertarFechasFestivas(eventos);
+    pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
+
+    
+
 
 
     int opcion=0;
@@ -96,12 +101,9 @@ int main(){
             {
                 int y=modificarEvento(eventos,improvedeventos);
                 pthread_t hilo;
-                if(y==1){
-                    pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
-                }
-                if(y==2){
-                    pthread_create(&hilo,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
-                }
+                pthread_t hilo2;
+                pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
+                pthread_create(&hilo2,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
                 break;
             }
 
@@ -109,12 +111,9 @@ int main(){
             {
                 int y=quitar(eventos,improvedeventos);
                 pthread_t hilo;
-                if(y==1){
-                    pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
-                }
-                if(y==2){
-                    pthread_create(&hilo,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
-                }
+                pthread_t hilo2;
+                pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
+                pthread_create(&hilo2,NULL,&actualizarTxt2,static_cast<void*>(&improvedeventos));
                 break;
             }
             
