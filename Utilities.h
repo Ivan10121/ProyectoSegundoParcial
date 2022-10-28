@@ -35,7 +35,7 @@ Fecha todayy=Fecha(diahoy,meshoy,aniohoy);
 
 void menu(){
     cout<<"Elija una opcion"<<endl;
-    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Buscar evento"<<endl<<"5.Dias restantes"<<endl<<"6.Generar txt con resumen del mes"<<endl;
+    cout<<"1.Crear evento"<<endl<<"2.Modificar evento"<<endl<<"3.Eliminar evento"<<endl<<"4.Buscar evento"<<endl<<"5.Dias restantes"<<endl<<"6.Generar txt con resumen del mes"<<endl<<"7.Salir"<<endl;
 }
 
 bool archivo_existe(string nombre)
@@ -153,6 +153,7 @@ void capturaEvento(vector<Evento>&eventos){
         eventos.push_back(Evento(nombre,a,b,c));
         registroEcritura.open("Registro.txt",ios::out|ios::app);
         registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl;
+        system("cls");
         registroEcritura.close();
     }
     catch(exception e){
@@ -181,6 +182,7 @@ Evento crearEvento(vector<Evento>&eventos){
         eventos.push_back(Evento(nombre,a,b,c));
         registroEcritura.open("Registro.txt",ios::out|ios::app);
         registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl;
+        system("cls");
         registroEcritura.close();
         return Evento(nombre,a,b,c);
     }
@@ -218,6 +220,7 @@ void capturaImprovedEvento(vector<improvedEvento>&improvedeventos){
 
         registroEcritura.open("Registro2.txt",ios::out|ios::app);
         registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl<<lugar<<endl<<descripcion<<endl;
+        system("cls");
         registroEcritura.close();
     }
     catch(exception e){
@@ -251,6 +254,7 @@ improvedEvento crearImprovedEvento(vector<improvedEvento>&improvedEventos){
         improvedEventos.push_back(improvedEvento(nombre,a,b,c,lugar,descripcion));
         registroEcritura.open("Registro2.txt",ios::out|ios::app);
         registroEcritura<<nombre<<endl<<a<<endl<<b<<endl<<c<<endl<<lugar<<endl<<descripcion<<"\n";
+        system("cls");
         registroEcritura.close();
         return improvedEvento(nombre,a,b,c,lugar,descripcion);
     }
@@ -405,7 +409,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
     }
 
     if(!vec1 && !vec2){
-        cout<<"El evento no existe"<<endl;
+        cout<<"El evento no existe"<<endl<<endl;
     }
 
     if(vec1){
@@ -424,7 +428,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     eventos[i].setNombre(cad);
                 }
             }
-
+            system("cls");
         }
 
         if(op==2){
@@ -436,6 +440,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     eventos[i].setDia(dia);
                 }
             }
+            system("cls");
         }
 
         if(op==3){
@@ -447,6 +452,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     eventos[i].setMes(mes);
                 }
             }
+            system("cls");
         }
 
         if(op==4){
@@ -458,6 +464,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     eventos[i].setAnio(anio);
                 }
             }
+            system("cls");
         }
         return 1;
     }
@@ -478,6 +485,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setNombre(cad);
                 }
             }
+            system("cls");
         }
 
         if(op==2){
@@ -489,6 +497,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setDia(dia);
                 }
             }
+            system("cls");
         }
 
         if(op==3){
@@ -500,6 +509,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setMes(mes);
                 }
             }
+            system("cls");
         }
 
         if(op==4){
@@ -511,6 +521,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setAnio(anio);
                 }
             }
+            system("cls");
         }
 
         if(op==5){
@@ -523,6 +534,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setLugar(cad);
                 }
             }
+            system("cls");
         }
 
         if(op==6){
@@ -535,6 +547,7 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
                     improvedeventos[i].setDescripcion(cad);
                 }
             }
+            system("cls");
         }
         return 2;
     }
@@ -544,75 +557,43 @@ int modificarEvento(vector<Evento>&eventos,vector<improvedEvento>&improvedevento
 }
 
 
-int quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
+void quitar(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
     bool vec1,vec2;
+    vec1=vec2=false;
     cout<<"Ingrese el nombre del evento que desea eliminar"<<endl;
     limpiarBuffer();
     string nombre;
     getline(cin,nombre);
-    map<string,Evento> mapa1;
-    map<string,improvedEvento> mapa2;
 
-    for(auto it=eventos.begin();it != eventos.end(); it++){
+    for(auto it=eventos.begin();it!=eventos.end();++it){
         Evento aux=*it;
         string cad=aux.getNombre();
-        mapa1.insert(make_pair(cad,aux));
+        if(cad==nombre){
+            eventos.erase(it);
+            cout<<"Eliminado"<<endl<<endl;
+            vec1=true;
+        }
     }
 
-    for(auto it=improvedeventos.begin();it != improvedeventos.end(); it++){
+    for(auto it=improvedeventos.begin();it!=improvedeventos.end();++it){
         improvedEvento aux=*it;
         string cad=aux.getNombre();
-        mapa2.insert(make_pair(cad,aux));
-    }
-
-    if(mapa1.find(nombre) != mapa1.end()){
-        vec1=true;
-    }
-    if(mapa2.find(nombre) != mapa2.end()){
-        vec2=true;
+        if(cad==nombre){
+            improvedeventos.erase(it);
+            cout<<"Eliminado"<<endl<<endl;
+            vec2=true;
+        }
     }
 
     if(!vec1 && !vec2){
-        cout<<"El evento que desea eliminar no existe"<<endl;
-    }
-
-    if(vec1){
-        if(eventos.size()>1){
-            for(auto it=eventos.begin();it!=eventos.end();++it){
-                Evento aux=*it;
-                string cad=aux.getNombre();
-                if(cad==nombre){
-                    eventos.erase(it);
-                }
-            }
-        }else{
-            eventos.clear();
-        }
-        return 1;
-    }
-
-    if(vec2){
-        if(improvedeventos.size()>1){
-            for(auto it=improvedeventos.begin();it!=improvedeventos.end();++it){
-                improvedEvento aux=*it;
-                string cad=aux.getNombre();
-                if(cad==nombre){
-                    improvedeventos.erase(it);
-                }
-            }
-        }else{
-            improvedeventos.clear();
-        }
-        return 2;
-    }
-    else{
-        return 0;
+        cout<<"El evento no existe"<<endl<<endl;
     }
 }
 
+pthread_mutex_t lock;
 
 void *actualizarTxt1(void *args){
-
+    pthread_mutex_lock(&lock);
     vector<Evento>&eventos=*reinterpret_cast<vector<Evento>*>(args);
 
     ofstream auxiliar;
@@ -626,11 +607,13 @@ void *actualizarTxt1(void *args){
     auxiliar.close();
     remove("Registro.txt");
     rename("Auxiliar.txt","Registro.txt");
+    pthread_mutex_unlock(&lock);
     pthread_exit(NULL);
 
 }
 
 void *actualizarTxt2(void *args){
+    pthread_mutex_lock(&lock);
     vector<improvedEvento>&improvedeventos=*reinterpret_cast<vector<improvedEvento>*>(args);
     ofstream auxiliar;
     auxiliar.open("Auxiliar.txt",ios::out|ios::app);
@@ -642,6 +625,8 @@ void *actualizarTxt2(void *args){
     auxiliar.close();
     remove("Registro2.txt");
     rename("Auxiliar.txt","Registro2.txt");
+    pthread_mutex_unlock(&lock);
+    pthread_exit(NULL);
 }
 
 
@@ -708,10 +693,10 @@ void cuentaDias(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         auto it=mapa1.find(nombre);
         Evento aux=it->second;
         Fecha a=aux.getFecha();
-        if(todayy<a==false){
+        if(a<todayy){
             printf("Este evento ya pas%c\n\n",162);
         }else{
-            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" para este evento"<<endl;
+            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" para este evento"<<endl<<endl;
         }
     }
 
@@ -719,10 +704,10 @@ void cuentaDias(vector<Evento>&eventos,vector<improvedEvento>&improvedeventos){
         auto it=mapa2.find(nombre);
         improvedEvento aux=it->second;
         Fecha a=aux.getFecha();
-        if(todayy<a==false){
+        if(a<todayy){
             printf("Este evento ya pas%c\n\n",162);
         }else{
-            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" dias para este evento"<<endl;
+            cout<<"Fatan "<<diasRestantes(aux.getFecha())<<" dias para este evento"<<endl<<endl;
         }
     }
 }
@@ -741,10 +726,10 @@ void cuentaDias(){
         int b=stoi(mes);
         int c=stoi(anio);
         Fecha aux=Fecha(a,b,c);
-        if(todayy>aux){
+        if(aux<todayy){
             printf("Esta fecha ya pas%c\n\n",162);
         }else{
-            cout<<"Fatan "<<diasRestantes(aux)<<" dias para esta fecha"<<endl;
+            cout<<"Fatan "<<diasRestantes(aux)<<" dias para esta fecha"<<endl<<endl;
         }
 
     }
@@ -803,7 +788,6 @@ void insertarFechasFestivas(vector<Evento>&eventos){
     eventos.push_back(ev11);
 }
 
- pthread_mutex_t lock;
 
 void *verificar(void* args){
     vector<Evento>&eventos=*reinterpret_cast<vector<Evento>*>(args);
