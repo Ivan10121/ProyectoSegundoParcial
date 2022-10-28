@@ -7,12 +7,11 @@ int main(){
     obtenerRegistro(eventos);
     obtenerRegistro(improvedeventos);
     pthread_t hilo3;
-    insertarFechasFestivas(eventos);
+    if(!archivo_existe("Registro.txt")){
+        insertarFechasFestivas(eventos);
+    }
     pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
-
-    
-
-
+    pthread_mutex_init(&lock,NULL);
 
     int opcion=0;
     do{
@@ -109,7 +108,7 @@ int main(){
 
             case 3:
             {
-                int y=quitar(eventos,improvedeventos);
+                quitar(eventos,improvedeventos);
                 pthread_t hilo;
                 pthread_t hilo2;
                 pthread_create(&hilo,NULL,&actualizarTxt1,static_cast<void*>(&eventos));
@@ -136,11 +135,14 @@ int main(){
             case 6:
                 generarTxt(eventos,improvedeventos);
                 break;
+
+            case 7:
+                break;
             
             default:
                 cout<<"Opcion no valida."<<endl<<endl;
         }
-    }while(opcion!=9);
+    }while(opcion!=7);
 
     return 0;
 }
